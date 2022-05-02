@@ -1,4 +1,4 @@
-INSERT MANDATORY GIF
+Hej
 
 # Project Title
 
