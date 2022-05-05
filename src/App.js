@@ -10,6 +10,7 @@ window.addEventListener('resize', function () {
   app.renderer.resize(width, height);
 });
 
+// Create canvas and set properties to it
 const app = new Application({
   width: width,
   height: height,
@@ -30,13 +31,14 @@ const style = new TextStyle({
 });
 
 const title = new Text('Memory! 👾 ', style);
-title.title = 'Memory the Game!';
+// title.title = 'Memory the Game!';
 
 // Center position the title
 title.anchor.set(0.5, 0.5);
 title.x = width / 2;
 title.y = 72;
 
+// Add title to app.stage so that it can be rendered to the canvas
 app.stage.addChild(title);
 
 // Create a circle as a test
@@ -49,5 +51,5 @@ circle.endFill();
 circle.x = width / 2;
 circle.y = height / 2;
 
-// Add circle to app.stage so that it can be rendered
+// Add circle to app.stage so that it can be rendered to the canvas
 app.stage.addChild(circle);
