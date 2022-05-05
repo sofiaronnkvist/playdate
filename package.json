@@ -1,3 +1,16 @@
 {
-  "private": true
+  "name": "vanilla",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.9.7"
+  },
+  "dependencies": {
+    "pixi.js": "^6.3.1"
+  }
 }
