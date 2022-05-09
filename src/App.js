@@ -3,7 +3,8 @@ import '../style.css';
 
 // Import our components here
 import Title from './components/Title';
-import Circle from './components/Circle';
+// import Circle from './components/Circle';
+import CardContainer from './components/CardContainer';
 
 // Width and height for our fullscreen canvas
 const width = document.documentElement.clientWidth;
@@ -26,8 +27,9 @@ const app = new Application({
 });
 
 // Add in our components
-let circle = new Circle({ app });
+// let circle = new Circle({ app });
 let title = new Title({ app });
+let container = new CardContainer({ app });
 
 // Add canvas to index.html
 document.body.appendChild(app.view);
