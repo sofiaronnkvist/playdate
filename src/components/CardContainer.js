@@ -1,9 +1,9 @@
-import { Container, SCALE_MODES, Sprite, Texture, Loader } from 'pixi.js';
-import frontSide from '../../assets/images/front_side_1.png';
-import backSide from '../../assets/images/back_side.png';
+import { Container, SCALE_MODES, Sprite, Texture, Ticker } from 'pixi.js';
 
 const width = document.documentElement.clientWidth;
 const height = document.documentElement.clientHeight;
+
+var assetFolder = '../assets/images/';
 
 export default class CardContainer {
   constructor({ app }) {
@@ -11,86 +11,81 @@ export default class CardContainer {
 
     // Create container to store our cards in
     this.container = new Container();
-    // this.texture = Texture.from(frontSide);
-    // this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
 
-    const loader = new Loader();
+    // Create a 6x2 grid of cards
+    for (let i = 0; i < 12; i++) {
+      this.texture = Texture.from(assetFolder + 'back_side.png');
+      this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
+      this.card = new Sprite.from(this.texture);
 
-    loader.add('../../assets/images/spritesheet.json').load(() => {
-      const id =
-        loader.resources['../../assets/images/spritesheet.json'].textures;
+      this.card.anchor.set(0.5);
+      this.card.scaleX = 1;
 
-      const backSide = console.log(id[`front_side_6.png`]);
+      // Gap spacing in x-axis
+      this.card.x = (i % 6) * 210;
 
-      // const frontSide = new Texture()
+      // Gap spacing in y-axis
+      this.card.y = Math.floor(i / 6) * 315;
 
-      // Create a 6x2 grid of cards
-      for (let i = 1; i < 7; i++) {
-        // this.card = frontSide;
-        this.card = new Sprite(id[`front_side_${i}.png`]);
-        this.card.anchor.set(0.5);
-        this.card.scaleX = 1;
+      // Card clickable
+      this.card.interactive = true;
+      this.card.buttonMode = true;
 
-        // Gap spacing in x-axis
-        this.card.x = (i % 6) * 210;
+      // Click event for cards
+      this.card.on('pointerdown', onClick);
 
-        // Gap spacing in y-axis
-        this.card.y = Math.floor(i / 6) * 310;
+      // Set scale.x manually (Testing purposes)
+      // this.card.scale.x = 0.5;
 
-        // Add card into container
-        this.container.addChild(this.card);
+      let card = this.card;
 
-        // Card clickable
-        this.card.interactive = true;
-        this.card.buttonMode = true;
+      function onClick() {
+        card.scale.x = 1;
+        let isScalingDown = true;
+        let doScale = true;
 
-        // Click event for cards
-        this.card.on('pointerdown', onClick);
-
-        let card = this.card;
-
-        function onClick() {
-          card.scale.x = 1;
-          let doScale = true;
-          let isScalingDown = true;
-
-          app.ticker.add(() => {
-            if (doScale) {
-              if (isScalingDown) {
-                card.scale.x -= 0.075;
-                if (card.scale.x <= 0) {
-                  card.scale.x = 0;
-                  this.card = new Sprite(
-                    loader.resources[
-                      '../../assets/images/spritesheet.json'
-                    ].textures['back_side.png']
-                  );
-                  console.log('show backside!');
-
-                  // this.card = new Sprite(this.texture);
-                  isScalingDown = false;
-                }
-              } else {
-                card.scale.x += 0.075;
-                if (card.scale.x >= 1) {
-                  card.scale.x = 1;
-                  isScalingDown = true;
-                  doScale = false;
-                }
+        app.ticker.add(() => {
+          if (doScale) {
+            if (isScalingDown) {
+              card.scale.x -= 0.05;
+              if (card.scale.x <= 0) {
+                card.scale.x = 0;
+                this.texture = Texture.from(
+                  assetFolder + `front/front_side_${i}.png`
+                );
+                isScalingDown = false;
+              }
+            } else {
+              card.scale.x += 0.05;
+              if (card.scale.x >= 1) {
+                card.scale.x = 1;
+                isScalingDown = true;
+                doScale = false;
               }
             }
-          });
-          console.log('clicked');
-        }
+          }
+        });
+        console.log('clicked');
       }
+
+      // function onClick() {
+      //   console.log('Scale up!');
+      //   card.scale.x *= 1.25;
+      //   card.scale.y *= 1.25;
+      // }
+
+      // Add card into container
+
+      this.container.addChild(this.card);
+
       // Set anchor of container in the middle
       this.container.pivot.x = this.container.width / 2;
       this.container.pivot.y = this.container.height / 2;
 
       // Position container in the middle of canvas
-      this.container.x = width / 1.8;
-      this.container.y = height / 1.5;
-    });
+      this.container.x = width / 2;
+      this.container.y = height / 2;
+    }
 
     // Lastly add container to stage (Canvas)
     app.stage.addChild(this.container);
