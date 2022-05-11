@@ -37,9 +37,75 @@ export default class CardContainer {
       // Set scale.x manually (Testing purposes)
       // this.card.scale.x = 0.5;
 
+      const clickedCards = [];
+      const cardArray = [
+        {
+          name: 'circle',
+          img: assetFolder + '/front/front_side_0.png',
+          id: 0,
+        },
+        {
+          name: 'square',
+          img: assetFolder + '/front/front_side_1.png',
+          id: 1,
+        },
+        {
+          name: 'pyramid',
+          img: assetFolder + '/front/front_side_2.png',
+          id: 2,
+        },
+        {
+          name: 'diamond',
+          img: assetFolder + '/front/front_side_3.png',
+          id: 3,
+        },
+        {
+          name: 'hexagon',
+          img: assetFolder + '/front/front_side_4.png',
+          id: 4,
+        },
+        {
+          name: 'pentagon',
+          img: assetFolder + '/front/front_side_5.png',
+          id: 5,
+        },
+        {
+          name: 'secondCircle',
+          img: assetFolder + '/front/front_side_6.png',
+          id: 6,
+        },
+        {
+          name: 'secondSquare',
+          img: assetFolder + '/front/front_side_7.png',
+          id: 7,
+        },
+        {
+          name: 'secondPyramid',
+          img: assetFolder + '/front/front_side_8.png',
+          id: 8,
+        },
+        {
+          name: 'secondDiamond',
+          img: assetFolder + '/front/front_side_9.png',
+          id: 9,
+        },
+        {
+          name: 'secondHexagon',
+          img: assetFolder + '/front/front_side_10.png',
+          id: 10,
+        },
+        {
+          name: 'secondPentagon',
+          img: assetFolder + '/front/front_side_11.png',
+          id: 11,
+        },
+      ];
+
       let card = this.card;
 
-      function onClick() {
+      function onClick(e) {
+        clickedCards.push(cardArray[i]);
+        console.log(clickedCards);
         card.scale.x = 1;
         let isScalingDown = true;
         let doScale = true;
@@ -50,9 +116,7 @@ export default class CardContainer {
               card.scale.x -= 0.05;
               if (card.scale.x <= 0) {
                 card.scale.x = 0;
-                this.texture = Texture.from(
-                  assetFolder + `front/front_side_${i}.png`
-                );
+                this.texture = Texture.from(cardArray[i].img);
                 isScalingDown = false;
               }
             } else {
