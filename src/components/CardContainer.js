@@ -12,6 +12,7 @@ export default class CardContainer {
     // Create container to store our cards in
     this.container = new Container();
 
+    const firstPick = [];
     const clickedCards = [];
     const cardArray = [
       {
@@ -47,37 +48,37 @@ export default class CardContainer {
       {
         name: 'secondCircle',
         img: assetFolder + '/front/front_side_6.png',
-        id: 6,
+        id: 0,
       },
       {
         name: 'secondSquare',
         img: assetFolder + '/front/front_side_7.png',
-        id: 7,
+        id: 1,
       },
       {
         name: 'secondPyramid',
         img: assetFolder + '/front/front_side_8.png',
-        id: 8,
+        id: 2,
       },
       {
         name: 'secondDiamond',
         img: assetFolder + '/front/front_side_9.png',
-        id: 9,
+        id: 3,
       },
       {
         name: 'secondHexagon',
         img: assetFolder + '/front/front_side_10.png',
-        id: 10,
+        id: 4,
       },
       {
         name: 'pentagon',
         img: assetFolder + '/front/front_side_11.png',
-        id: 11,
+        id: 5,
       },
     ];
 
     // Randomize cards
-    cardArray.sort(() => 0.5 - Math.random());
+    // cardArray.sort(() => 0.5 - Math.random());
 
     // Create a 6x2 grid of cards
     for (let i = 0; i < 12; i++) {
@@ -108,9 +109,10 @@ export default class CardContainer {
 
       function onClick(e) {
         clickedCards.push(cardArray[i]);
+
         console.log('clickedCards: ' + clickedCards.keys);
         console.log(clickedCards);
-        console.log(cardArray);
+        // console.log(cardArray);
         card.scale.x = 1;
         let isScalingDown = true;
         let doScale = true;
@@ -123,19 +125,29 @@ export default class CardContainer {
                 card.scale.x = 0;
                 this.texture = Texture.from(cardArray[i].img);
                 isScalingDown = false;
-                if (clickedCards[0].name === cardArray[i].name) {
-                  console.log('cardArray: ' + cardArray[i].name);
-                  console.log('clickedCards: ' + clickedCards[i]);
-                  console.log('MATCH FOUND!');
-                } else {
-                  // If not match rotate back
-                  console.log('NO MATCH :(');
-                  // this.texture = Texture.from(assetFolder + 'back_side.png');
-                  card.scale.x += 0.05;
-                  card.scale.x = 1;
-                  isScalingDown = true;
-                  doScale = false;
+                if (clickedCards.length > 1) {
+                  // console.log(clickedCards[0].id);
+                  // console.log(clickedCards[1].id);
+                  if (clickedCards[0].id === clickedCards[1].id) {
+                    console.log('Its a match');
+                  } else {
+                    console.log('No match.. ');
+                  }
                 }
+                // if (firstPick[0].id === cardArray[i].id) {
+                //   console.log(firstPick);
+                //   // console.log('cardArray: ' + cardArray[i].name);
+                //   // console.log('clickedCards: ' + clickedCards[i]);
+                //   console.log('MATCH FOUND!');
+                // } else {
+                //   // If not match rotate back
+                //   console.log('NO MATCH :(');
+                //   // this.texture = Texture.from(assetFolder + 'back_side.png');
+                //   card.scale.x += 0.05;
+                //   card.scale.x = 1;
+                //   isScalingDown = true;
+                //   doScale = false;
+                // }
               }
             } else {
               card.scale.x += 0.05;
