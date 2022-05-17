@@ -1,4 +1,4 @@
-import { Container, SCALE_MODES, Sprite, Texture, Ticker } from 'pixi.js';
+import { Container, SCALE_MODES, Sprite, Texture } from 'pixi.js';
 
 const width = document.documentElement.clientWidth;
 const height = document.documentElement.clientHeight;
@@ -12,8 +12,9 @@ export default class CardContainer {
     // Create container to store our cards in
     this.container = new Container();
 
-    const firstPick = [];
-    const clickedCards = [];
+    let clickedCards = [];
+    let firstClick = [];
+    let secondClick = [];
     const cardArray = [
       {
         name: 'circle',
@@ -71,7 +72,7 @@ export default class CardContainer {
         id: 4,
       },
       {
-        name: 'pentagon',
+        name: 'secondPentagon',
         img: assetFolder + '/front/front_side_11.png',
         id: 5,
       },
@@ -82,12 +83,12 @@ export default class CardContainer {
 
     // Create a 6x2 grid of cards
     for (let i = 0; i < 12; i++) {
+      // this.texture = Texture.from(cardArray[i].img);
       this.texture = Texture.from(assetFolder + 'back_side.png');
       this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
       this.card = new Sprite.from(this.texture);
 
       this.card.anchor.set(0.5);
-      this.card.scaleX = 1;
 
       // Gap spacing in x-axis
       this.card.x = (i % 6) * 210;
@@ -104,50 +105,30 @@ export default class CardContainer {
 
       // Set scale.x manually (Testing purposes)
       // this.card.scale.x = 0.5;
+      let isScalingDown = true;
+      let doScale = true;
 
       let card = this.card;
 
       function onClick(e) {
         clickedCards.push(cardArray[i]);
-
-        console.log('clickedCards: ' + clickedCards.keys);
-        console.log(clickedCards);
+        firstClick.push(card);
+        console.log(firstClick);
+        console.log(firstClick[0].texture);
+        // firstClick[0].texture = Texture.from(assetFolder + 'back_side.png');
+        // console.log(clickedCards);
         // console.log(cardArray);
         card.scale.x = 1;
-        let isScalingDown = true;
-        let doScale = true;
 
         app.ticker.add(() => {
           if (doScale) {
             if (isScalingDown) {
+              // console.log(clickedCards[0]);
               card.scale.x -= 0.05;
               if (card.scale.x <= 0) {
-                card.scale.x = 0;
+                // card.scale.x = 0;
                 this.texture = Texture.from(cardArray[i].img);
                 isScalingDown = false;
-                if (clickedCards.length > 1) {
-                  // console.log(clickedCards[0].id);
-                  // console.log(clickedCards[1].id);
-                  if (clickedCards[0].id === clickedCards[1].id) {
-                    console.log('Its a match');
-                  } else {
-                    console.log('No match.. ');
-                  }
-                }
-                // if (firstPick[0].id === cardArray[i].id) {
-                //   console.log(firstPick);
-                //   // console.log('cardArray: ' + cardArray[i].name);
-                //   // console.log('clickedCards: ' + clickedCards[i]);
-                //   console.log('MATCH FOUND!');
-                // } else {
-                //   // If not match rotate back
-                //   console.log('NO MATCH :(');
-                //   // this.texture = Texture.from(assetFolder + 'back_side.png');
-                //   card.scale.x += 0.05;
-                //   card.scale.x = 1;
-                //   isScalingDown = true;
-                //   doScale = false;
-                // }
               }
             } else {
               card.scale.x += 0.05;
@@ -159,17 +140,73 @@ export default class CardContainer {
             }
           }
         });
+        if (clickedCards.length > 1) {
+          // secondClick.push(card);
+          // console.log(secondClick);
+          let secondCard = card;
+          // console.log(clickedCards[0].id);
+          // console.log(clickedCards[1].id);
+          checkMatch();
+        }
         // console.log('clicked');
       }
 
-      // function checkMatch() {
-      //   console.log('Scale up!');
-      //   card.scale.x *= 1.25;
-      //   card.scale.y *= 1.25;
-      // }
+      function checkMatch() {
+        console.log(firstClick[0].texture);
+        // firstClick[0].texture = Texture.from(assetFolder + 'back_side.png');
+        if (clickedCards[0].id === clickedCards[1].id) {
+          // setTimeout(hideCards, 1200);
+          console.log('Its a match');
+          clickedCards = [];
+        } else {
+          console.log('No match..');
+          // console.log(card.scale.x);
+          setTimeout(resetCards, 1200);
+          // clickedCards = [];
+        }
+      }
+
+      function resetCards() {
+        doScale = true;
+        isScalingDown = true;
+        card.texture = Texture.from(cardArray[i].img);
+        // let texture = card.texture;
+        if (card.texture != Texture.from(assetFolder + 'back_side.png')) {
+          app.ticker.add(() => {
+            // console.log('change texture pls');
+            if (doScale) {
+              if (isScalingDown) {
+                card.scale.x -= 0.05;
+                console.log('hello?');
+                if (card.scale.x <= 0) {
+                  console.log(card.scale.x);
+                  card.scale.x = 0;
+                  // firstClick[0].texture = Texture.from(
+                  //   assetFolder + 'back_side.png'
+                  // );
+                  // firstClick[1].card.texture = Texture.from(
+                  //   assetFolder + 'back_side.png'
+                  // );
+                  card.texture = Texture.from(assetFolder + 'back_side.png');
+                  // clickedCards[0].img = assetFolder + 'back_side.png';
+                  isScalingDown = false;
+                }
+              } else {
+                card.scale.x += 0.05;
+                if (card.scale.x >= 1) {
+                  card.scale.x = 1;
+                  isScalingDown = true;
+                  doScale = false;
+                }
+              }
+            }
+          });
+        }
+        card.texture = Texture.from(cardArray[i].img);
+        clickedCards = [];
+      }
 
       // Add card into container
-
       this.container.addChild(this.card);
 
       // Set anchor of container in the middle
