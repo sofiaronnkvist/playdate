@@ -17,63 +17,63 @@ export default class CardContainer {
     let secondClick = [];
     const cardArray = [
       {
-        name: 'circle',
-        img: assetFolder + '/front/front_side_0.png',
+        name: 'citrus',
+        img: assetFolder + 'front/citrus.png',
         id: 0,
       },
       {
-        name: 'square',
-        img: assetFolder + '/front/front_side_1.png',
+        name: 'pineapple',
+        img: assetFolder + 'front/pineapple.png',
         id: 1,
       },
       {
-        name: 'pyramid',
-        img: assetFolder + '/front/front_side_2.png',
+        name: 'melon',
+        img: assetFolder + 'front/melon.png',
         id: 2,
       },
       {
-        name: 'diamond',
-        img: assetFolder + '/front/front_side_3.png',
+        name: 'coconut',
+        img: assetFolder + 'front/coconut.png',
         id: 3,
       },
       {
-        name: 'hexagon',
-        img: assetFolder + '/front/front_side_4.png',
+        name: 'orange',
+        img: assetFolder + 'front/orange.png',
         id: 4,
       },
       {
-        name: 'pentagon',
-        img: assetFolder + '/front/front_side_5.png',
+        name: 'banana',
+        img: assetFolder + 'front/banana.png',
         id: 5,
       },
       {
-        name: 'secondCircle',
-        img: assetFolder + '/front/front_side_6.png',
+        name: 'citrus_2',
+        img: assetFolder + 'front/citrus_2.png',
         id: 0,
       },
       {
-        name: 'secondSquare',
-        img: assetFolder + '/front/front_side_7.png',
+        name: 'pineapple_2',
+        img: assetFolder + 'front/pineapple_2.png',
         id: 1,
       },
       {
-        name: 'secondPyramid',
-        img: assetFolder + '/front/front_side_8.png',
+        name: 'melon_2',
+        img: assetFolder + 'front/melon_2.png',
         id: 2,
       },
       {
-        name: 'secondDiamond',
-        img: assetFolder + '/front/front_side_9.png',
+        name: 'coconut_2',
+        img: assetFolder + 'front/coconut_2.png',
         id: 3,
       },
       {
-        name: 'secondHexagon',
-        img: assetFolder + '/front/front_side_10.png',
+        name: 'orange_2',
+        img: assetFolder + 'front/orange_2.png',
         id: 4,
       },
       {
-        name: 'secondPentagon',
-        img: assetFolder + '/front/front_side_11.png',
+        name: 'banana_2',
+        img: assetFolder + 'front/banana_2.png',
         id: 5,
       },
     ];
@@ -82,7 +82,7 @@ export default class CardContainer {
     // cardArray.sort(() => 0.5 - Math.random());
 
     // Create a 6x2 grid of cards
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < cardArray.length; i++) {
       // this.texture = Texture.from(cardArray[i].img);
       this.texture = Texture.from(assetFolder + 'back_side.png');
       this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
@@ -101,7 +101,7 @@ export default class CardContainer {
       this.card.buttonMode = true;
 
       // Click event for cards
-      this.card.on('pointerdown', onClick);
+      this.card.on('pointerdown', () => onClickCard(cardArray[i]));
 
       // Set scale.x manually (Testing purposes)
       // this.card.scale.x = 0.5;
@@ -110,11 +110,48 @@ export default class CardContainer {
 
       let card = this.card;
 
+      const onClickCard = (cardArray) => {
+        if (clickedCards.length === 2) return;
+        if (clickedCards[0] && clickedCards[0][1].name === cardArray.name)
+          return;
+        if (clickedCards[1] && clickedCards[1][1].name === cardArray.name)
+          return;
+        clickedCards.push([card, cardArray]);
+        console.log({ clickedCards });
+        card.texture = Texture.from(cardArray.img);
+
+        //
+        if (doScale) {
+          if (isScalingDown) {
+            // console.log(clickedCards[0]);
+            card.scale.x -= 0.05;
+            if (card.scale.x <= 0) {
+              // card.scale.x = 0;
+              card.texture = Texture.from(cardArray.img);
+              isScalingDown = false;
+            }
+          } else {
+            card.scale.x += 0.05;
+            if (card.scale.x >= 1) {
+              card.scale.x = 1;
+              isScalingDown = true;
+              doScale = false;
+            }
+          }
+        }
+        //
+
+        if (clickedCards.length > 1) {
+          checkMatch();
+        }
+        console.log(clickedCards);
+      };
+
       function onClick(e) {
         clickedCards.push(cardArray[i]);
         firstClick.push(card);
-        console.log(firstClick);
-        console.log(firstClick[0].texture);
+        // console.log(firstClick);
+        // console.log(firstClick[0].texture);
         // firstClick[0].texture = Texture.from(assetFolder + 'back_side.png');
         // console.log(clickedCards);
         // console.log(cardArray);
@@ -152,9 +189,9 @@ export default class CardContainer {
       }
 
       function checkMatch() {
-        console.log(firstClick[0].texture);
+        // console.log(firstClick[0].texture);
         // firstClick[0].texture = Texture.from(assetFolder + 'back_side.png');
-        if (clickedCards[0].id === clickedCards[1].id) {
+        if (clickedCards[0][1].id === clickedCards[1][1].id) {
           // setTimeout(hideCards, 1200);
           console.log('Its a match');
           clickedCards = [];
@@ -169,40 +206,45 @@ export default class CardContainer {
       function resetCards() {
         doScale = true;
         isScalingDown = true;
-        card.texture = Texture.from(cardArray[i].img);
+
+        clickedCards.forEach((clickedCard) => {
+          clickedCard[0].texture = Texture.from(assetFolder + 'back_side.png');
+        });
+
+        // card.texture = Texture.from(cardArray[i].img);
         // let texture = card.texture;
-        if (card.texture != Texture.from(assetFolder + 'back_side.png')) {
-          app.ticker.add(() => {
-            // console.log('change texture pls');
-            if (doScale) {
-              if (isScalingDown) {
-                card.scale.x -= 0.05;
-                console.log('hello?');
-                if (card.scale.x <= 0) {
-                  console.log(card.scale.x);
-                  card.scale.x = 0;
-                  // firstClick[0].texture = Texture.from(
-                  //   assetFolder + 'back_side.png'
-                  // );
-                  // firstClick[1].card.texture = Texture.from(
-                  //   assetFolder + 'back_side.png'
-                  // );
-                  card.texture = Texture.from(assetFolder + 'back_side.png');
-                  // clickedCards[0].img = assetFolder + 'back_side.png';
-                  isScalingDown = false;
-                }
-              } else {
-                card.scale.x += 0.05;
-                if (card.scale.x >= 1) {
-                  card.scale.x = 1;
-                  isScalingDown = true;
-                  doScale = false;
-                }
-              }
-            }
-          });
-        }
-        card.texture = Texture.from(cardArray[i].img);
+        // if (card.texture != Texture.from(assetFolder + 'back_side.png')) {
+        //   app.ticker.add(() => {
+        //     // console.log('change texture pls');
+        //     if (doScale) {
+        //       if (isScalingDown) {
+        //         card.scale.x -= 0.05;
+        //         // console.log('hello?');
+        //         if (card.scale.x <= 0) {
+        //           // console.log(card.scale.x);
+        //           card.scale.x = 0;
+        //           // firstClick[0].texture = Texture.from(
+        //           //   assetFolder + 'back_side.png'
+        //           // );
+        //           // firstClick[1].card.texture = Texture.from(
+        //           //   assetFolder + 'back_side.png'
+        //           // );
+        //           card.texture = Texture.from(assetFolder + 'back_side.png');
+        //           // clickedCards[0].img = assetFolder + 'back_side.png';
+        //           isScalingDown = false;
+        //         }
+        //       } else {
+        //         card.scale.x += 0.05;
+        //         if (card.scale.x >= 1) {
+        //           card.scale.x = 1;
+        //           isScalingDown = true;
+        //           doScale = false;
+        //         }
+        //       }
+        //     }
+        //   });
+        // }
+        // card.texture = Texture.from(cardArray[i].img);
         clickedCards = [];
       }
 

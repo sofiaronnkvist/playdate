@@ -10,11 +10,11 @@ export default class Title {
     const style = new TextStyle({
       align: 'center',
       fill: '#000000',
-      fontSize: 56,
+      fontSize: 36,
     });
 
     // Adding text and styling from above
-    this.title = new Text('Memory! 👾 ', style);
+    this.title = new Text('Memory! Match the fruits 👾', style);
 
     // Center position the title
     this.title.anchor.set(0.5, 0.5);
