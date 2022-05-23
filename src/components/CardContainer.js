@@ -81,7 +81,7 @@ export default class CardContainer {
     ];
 
     // Randomize cards
-    // cardArray.sort(() => 0.5 - Math.random());
+    cardArray.sort(() => 0.5 - Math.random());
 
     // Create a 6x2 grid of cards
     // runGame() {
@@ -94,6 +94,9 @@ export default class CardContainer {
         this.texture = Texture.from(assetFolder + 'back_side.png');
         this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
         this.card = new Sprite.from(this.texture);
+
+        // Add card into container
+        this.container.addChild(this.card);
 
         this.card.anchor.set(0.5);
 
@@ -207,7 +210,7 @@ export default class CardContainer {
             console.log('Its a match');
             clickedCards = [];
             matchedPairs++;
-            checkComplete();
+            setTimeout(checkComplete, 1200);
             // console.log(matchedPairs);
           } else {
             console.log('No match..');
@@ -222,6 +225,7 @@ export default class CardContainer {
           isScalingDown = true;
 
           clickedCards.forEach((clickedCard) => {
+            console.log('Congrats');
             clickedCard[0].texture = Texture.from(
               assetFolder + 'back_side.png'
             );
@@ -273,21 +277,19 @@ export default class CardContainer {
             runGame();
           }
         }
-
-        // Add card into container
-        this.container.addChild(this.card);
-
-        // Set anchor of container in the middle
-        this.container.pivot.x = this.container.width / 2;
-        this.container.pivot.y = this.container.height / 2;
-
-        // Position container in the middle of canvas
-        this.container.x = width / 2;
-        this.container.y = height / 2;
       }
     };
 
     runGame();
+
+    //After adding cards to container, we get a proper container size which we can position in the center of the canvas
+    // Set anchor of container in the middle
+    this.container.pivot.x = this.container.width / 2;
+    this.container.pivot.y = this.container.height / 2;
+
+    // Position container in the middle of canvas
+    this.container.x = width / 2;
+    this.container.y = height / 2;
 
     // Lastly add container to stage (Canvas)
     app.stage.addChild(this.container);
