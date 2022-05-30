@@ -23,7 +23,7 @@ const app = new Application({
   transparent: false,
   resolution: 1,
   // When changing colors make sure to type 0x before
-  backgroundColor: 0xfec648,
+  backgroundColor: 0xfdefde,
 });
 
 // Add in our components
