@@ -3,7 +3,7 @@ import { Container, SCALE_MODES, Sprite, Texture } from 'pixi.js';
 const width = document.documentElement.clientWidth;
 const height = document.documentElement.clientHeight;
 
-var assetFolder = '../assets/images/';
+var assetFolder = '/assets/images/';
 
 export default class CardContainer {
   constructor({ app }) {
