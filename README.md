@@ -38,7 +38,18 @@ npm run dev
 
 # Code Review
 
-1. `example.js:10-15` - Remember to think about X and this could be refactored using the amazing Y function.
+By (Sofia Rönnkvist)[https://github.com/sofiaronnkvist] and (Jennifer Andersson)[https://github.com/JennAnd].
+
+1. `CardContainer.js:116` - It would be nice to have an end screen that congratulates you on winning the game, not just logging the message to the console.
+2. `CardContainer.js:6` - Use const or let instead of var.
+3. `App.js:23` - Transparent is deprecated in PIXI.
+4. `CardContainer.js:86` - You have messages to show if there is a match or not that is only logged to the console. Those would be nice to see as a player!
+5. `CardContainer:general` - It would be easier to manage your code if your functions were not put inside of runGame, and just called on inside of runGame.
+6. `App.js:31-32` - There is no need to create variables that are never used here. You can just create the new instances.
+7. `CardContainer.js:6` - For easier naming, you could exclude having an assets folder to put your images folder in.
+8. `index.html:5` - Since you have a public folder, your favicon does not need to be in the root. It can be put with the other pictures.
+9. `index.html:11` - You could link to the App.js file directly here.
+10. `main.js` - If you link directly to App.js instead, this file can be deleted.
 
 # Testers
 
